@@ -8,12 +8,10 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @Post()
-  create(
-    @Body("email") email: string,
-    @Body("password") password: string,
-    @Body("name") name: string) {
+  create(@Body() createUserDto: CreateUserDto
+  ) {
     // const myEmail: string = req.body.email
-    return this.usersService.create(email, password, name);
+    return this.usersService.create(createUserDto);
   }
 
   @Get()

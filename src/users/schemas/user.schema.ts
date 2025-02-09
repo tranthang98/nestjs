@@ -20,7 +20,7 @@ export class User {
     age: number;
 
     @Prop()
-    address: number;
+    address: string;
 
     @Prop()
     createdAt: Date;

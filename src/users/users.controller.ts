@@ -26,7 +26,6 @@ export class UsersController {
 
   @Patch()
   update(@Body() updateUserDto: UpdateUserDto) {
-    console.log(">> check updateUserDto = ", updateUserDto);
     return this.usersService.update(updateUserDto);
   }
 

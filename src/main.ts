@@ -15,12 +15,20 @@ async function bootstrap() {
   app.setViewEngine('ejs');
 
   const reflector = app.get(Reflector);
-  app.useGlobalGuards(new JwtAuthGuard(reflector));
+  // app.useGlobalGuards(new JwtAuthGuard(reflector));
 
   app.useGlobalPipes(new ValidationPipe());
 
   const configService = app.get(ConfigService);
 
+  //config cors
+  app.enableCors(
+    {
+  "origin": "http://localhost:3000",
+  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+  "preflightContinue": false,
+}
+  );
   await app.listen(configService.get<string>('PORT'));
 }
 bootstrap();

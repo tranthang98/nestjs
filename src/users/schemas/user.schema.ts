@@ -58,6 +58,9 @@ export class User {
     @Prop()
     isDeleted: boolean;
 
+    createdAt?: Date; // Added by timestamps
+    updatedAt?: Date; // Added by timestamps
+
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

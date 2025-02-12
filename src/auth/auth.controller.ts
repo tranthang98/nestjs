@@ -10,6 +10,7 @@ export class AuthController {
     private authService: AuthService
   ) { }
 
+  @ResponseMessage("User Login")
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post("/login")

@@ -33,6 +33,17 @@ export class AuthController {
   @ResponseMessage("Get user information")
   @Get('/account')
   handleGetAccount(@User() user: IUser) {
-    return user;
+    return { user };
+  }
+
+  @Public()
+  @ResponseMessage("Get User by refresh token")
+  @Get('/refresh')
+  handleRefreshAccount(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response
+  ) {
+    const refreshToken = request.cookies['refresh_token'];
+    return this.authService.proccesNewToken(refreshToken, response);
   }
 }

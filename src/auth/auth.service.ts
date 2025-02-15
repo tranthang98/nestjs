@@ -102,7 +102,7 @@ export class AuthService {
         response.cookie('refresh_token', refresh_token, {
           httpOnly: true,
           maxAge:
-            ms(this.configService.get<string>('JWT_REFRESH_EXPIRE')) * 1000,
+            ms(this.configService.get<string>('JWT_REFRESH_EXPIRE')),
         });
 
         return {

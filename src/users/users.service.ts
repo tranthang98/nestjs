@@ -12,23 +12,25 @@ import { User } from 'src/decorator/customize';
 
 @Injectable()
 export class UsersService {
-
   constructor(
     @InjectModel(UserM.name)
-    private userModel: SoftDeleteModel<UserDocument>
-  ) { }
+    private userModel: SoftDeleteModel<UserDocument>,
+  ) {}
 
   getHashPassword = (password: string) => {
     const salt = genSaltSync(10);
     const hash = hashSync(password, salt);
     return hash;
-  }
+  };
 
   async create(createUserDto: CreateUserDto, @User() user: IUser) {
-    const { name, email, password, age, gender, address, role, company } = createUserDto;
+    const { name, email, password, age, gender, address, role, company } =
+      createUserDto;
     const isExist = await this.userModel.findOne({ email });
     if (isExist) {
-      throw new BadRequestException(`Email: ${email} đã tồn tại trên hệ thống. Vui lòng sử dụng email khác.`);
+      throw new BadRequestException(
+        `Email: ${email} đã tồn tại trên hệ thống. Vui lòng sử dụng email khác.`,
+      );
     }
     const hashPassword = this.getHashPassword(password);
     let newUser = await this.userModel.create({
@@ -42,12 +44,12 @@ export class UsersService {
       company,
       createdBy: {
         _id: user._id,
-        email: user.email
-      }
-    })
+        email: user.email,
+      },
+    });
     return {
       _id: newUser?._id,
-      createdAt: newUser?.createdAt
+      createdAt: newUser?.createdAt,
     };
   }
 
@@ -55,7 +57,9 @@ export class UsersService {
     const { name, email, password, age, gender, address } = registerUserDto;
     const isExist = await this.userModel.findOne({ email });
     if (isExist) {
-      throw new BadRequestException(`Email: ${email} đã tồn tại trên hệ thống. Vui lòng sử dụng email khác.`);
+      throw new BadRequestException(
+        `Email: ${email} đã tồn tại trên hệ thống. Vui lòng sử dụng email khác.`,
+      );
     }
     const hashPassword = this.getHashPassword(password);
     let user = await this.userModel.create({
@@ -65,8 +69,8 @@ export class UsersService {
       age,
       gender,
       address,
-      role: "USER"
-    })
+      role: 'USER',
+    });
     return user;
   }
 
@@ -75,13 +79,14 @@ export class UsersService {
     delete filter.page;
     delete filter.limit;
 
-    let offset = (+currentPage - 1) * (+limit);
+    let offset = (+currentPage - 1) * +limit;
     let defaultLimit = +limit ? +limit : 10;
 
     const totalItems = (await this.userModel.find(filter)).length;
     const totalPages = Math.ceil(totalItems / defaultLimit);
 
-    const result = await this.userModel.find(filter)
+    const result = await this.userModel
+      .find(filter)
       .select('-password')
       .skip(offset)
       .limit(defaultLimit)
@@ -93,25 +98,27 @@ export class UsersService {
       meta: {
         current: currentPage, //trang hiện tại
         pageSize: limit, //số lượng bản ghi đã lấy
-        pages: totalPages,  //tổng số trang với điều kiện query
-        total: totalItems // tổng số phần tử (số bản ghi)
+        pages: totalPages, //tổng số trang với điều kiện query
+        total: totalItems, // tổng số phần tử (số bản ghi)
       },
-      result //kết quả query
-    }
+      result, //kết quả query
+    };
   }
 
   findOne(id: string) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return `not found user`;
     }
-    return this.userModel.findOne({
-      _id: id
-    }).select('-password'); //to exclude password
+    return this.userModel
+      .findOne({
+        _id: id,
+      })
+      .select('-password'); //to exclude password
   }
 
   findOneByUsername(username: string) {
     return this.userModel.findOne({
-      email: username
+      email: username,
     });
   }
 
@@ -129,9 +136,10 @@ export class UsersService {
         ...updateUserDto,
         updatedBy: {
           _id: user._id,
-          email: user.email
-        }
-      });
+          email: user.email,
+        },
+      },
+    );
   }
 
   async remove(id: string, user: IUser) {
@@ -144,18 +152,18 @@ export class UsersService {
       {
         deletedBy: {
           _id: user._id,
-          email: user.email
-        }
-      }
+          email: user.email,
+        },
+      },
     );
-    return this.userModel.softDelete({ _id: id },);
+    return this.userModel.softDelete({ _id: id });
   }
 
   updateUserToken = async (refreshToken: string, _id: string) => {
     return await this.userModel.updateOne({ _id }, { refreshToken });
-  }
+  };
 
   findUserByToken = async (refreshToken: string) => {
     return await this.userModel.findOne({ refreshToken });
-  }
+  };
 }

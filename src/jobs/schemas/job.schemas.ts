@@ -1,43 +1,50 @@
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
-import { BaseSchema } from 'src/common/base.schemas';
+import { BaseSchema } from 'src/common/base.schema';
 
-export type UserDocument = HydratedDocument<User>;
+export type JobDocument = HydratedDocument<Job>;
 
 @Schema({ timestamps: true })
-export class User extends BaseSchema {
+export class Job extends BaseSchema {
 
     @Prop()
     name: string;
 
-    @Prop({ required: true })
-    email: string;
-
-    @Prop({ required: true })
-    password: string;
-
     @Prop()
-    age: number;
-
-    @Prop()
-    gender: string;
-
-    @Prop()
-    address: string;
+    skills: string[];
 
     @Prop({ type: Object })
     company: {
         _id: mongoose.Schema.Types.ObjectId;
         name: string;
+        logo: string;
     };
 
     @Prop()
-    role: string;
+    location: string;
 
     @Prop()
-    refreshToken: string;
+    salary: number;
+
+    @Prop()
+    quantity: number;
+
+    @Prop()
+    level: string;
+
+    @Prop()
+    description: string;
+
+    @Prop()
+    startDate: Date;
+
+    @Prop()
+    endDate: Date;
+
+    @Prop()
+    isActive: boolean;
 
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+export const JobSchema = SchemaFactory.createForClass(Job);

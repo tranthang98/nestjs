@@ -17,6 +17,8 @@ export class Company extends BaseSchema {
     @Prop()
     description: string;
 
+    @Prop()
+    logo: string;
 }
 
 export const CompanySchema = SchemaFactory.createForClass(Company);

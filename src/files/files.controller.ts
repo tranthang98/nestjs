@@ -9,9 +9,8 @@ import { Public } from 'src/decorator/customize';
 export class FilesController {
   constructor(private readonly filesService: FilesService) { }
 
-  @Public()
   @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('fileUpload'))
   uploadFile(@UploadedFile(
     new ParseFilePipeBuilder()
       .addFileTypeValidator({

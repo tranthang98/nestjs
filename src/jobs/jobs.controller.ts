@@ -17,7 +17,6 @@ export class JobsController {
 
   @Get()
   @Public()
-  @Public()
   findAll(
     @Query("current") currentPage: string,
     @Query("pageSize") limit: string,

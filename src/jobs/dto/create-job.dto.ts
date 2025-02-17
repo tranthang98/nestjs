@@ -1,5 +1,5 @@
-import { Transform } from "class-transformer";
-import { IsArray, IsBoolean, IsDate, IsNotEmpty, IsString } from "class-validator";
+import { Transform, Type } from "class-transformer";
+import { IsArray, IsBoolean, IsDate, IsNotEmpty, IsNotEmptyObject, IsObject, IsString, ValidateNested } from "class-validator";
 import mongoose from "mongoose";
 
 class Company {
@@ -22,6 +22,12 @@ export class CreateJobDto {
     // "each" tells class-validator to run the validation on each item of the array
     @IsString({ each: true, message: "skill định dạng là string" })
     skills: string[];
+
+    @IsNotEmptyObject()
+    @IsObject()
+    @ValidateNested()
+    @Type(() => Company)
+    company: Company;
 
     @IsNotEmpty({ message: 'location không được để trống', })
     location: string;
